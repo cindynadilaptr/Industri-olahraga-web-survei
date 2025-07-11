@@ -650,6 +650,7 @@ apiRouter.get("/events/:eventId/hasil-survei/download", verifyToken, async (req,
 
 app.use('/api', apiRouter);
 app.use((req, res) => {
+  console.log('DEBUG → Request masuk:', req.method, req.originalUrl);
   res.status(404).json({ error: `Route ${req.method} ${req.originalUrl} not found` });
 });
 
