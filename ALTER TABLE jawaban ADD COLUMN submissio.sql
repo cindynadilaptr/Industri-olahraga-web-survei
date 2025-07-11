@@ -1,1 +1,0 @@
-ALTER TABLE jawaban ADD COLUMN submission_id INTEGER;
