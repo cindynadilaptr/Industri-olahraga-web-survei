@@ -59,8 +59,16 @@ function KelolaPenggunaPage() {
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message);
                 
-                Swal.fire('Terhapus!', data.message, 'success');
-                fetchUsers();
+            Swal.fire({
+              title: 'Terhapus!',
+              text: data.message,
+              icon: 'success',
+              buttonsStyling: false,
+              customClass: {
+                confirmButton: 'font-semibold text-white bg-[#14BBF0] hover:bg-[#0085CE] px-5 py-2.5 rounded-lg transition-colors'
+              }
+            });
+            fetchUsers();
             } catch (error) {
                 Swal.fire('Gagal!', error.message, 'error');
             }

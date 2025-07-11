@@ -51,9 +51,9 @@ const isAdmin = (req, res, next) => {
 };
 
 apiRouter.post("/register", async (req, res) => {
-    const { nama, email, password } = req.body;
-    if (!nama || !email || !password) {
-        return res.status(400).json({ message: "Nama, email, dan password wajib diisi." });
+    const { nama, email, password, peran } = req.body;
+    if (!nama || !email || !password || !peran) {
+        return res.status(400).json({ message: "Nama, email, password, dan peran wajib diisi." });
     }
     try {
         const hashedPassword = await bcrypt.hash(password, 10);

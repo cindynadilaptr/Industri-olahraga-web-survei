@@ -34,7 +34,7 @@ function Register() {
           title: 'Berhasil!',
           text: 'Pendaftaran berhasil. Silakan login.',
           icon: 'success',
-          confirmButtonColor: '#3085d6',
+          confirmButtonColor: '#14BBF0',
         }).then(() => {
           navigate("/login");
         });
