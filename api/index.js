@@ -59,7 +59,7 @@ apiRouter.post("/register", async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         await pool.query(
             "INSERT INTO users (nama, email, password_hash, peran) VALUES ($1, $2, $3, $4) RETURNING id",
-            [nama, email, hashedPassword, 'Surveyor']
+            [nama, email, hashedPassword, peran]
         );
         res.status(201).json({ message: "Registrasi berhasil! Silakan login." });
     } catch (error) {
