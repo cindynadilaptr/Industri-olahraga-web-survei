@@ -8,7 +8,7 @@ const ExcelJS = require('exceljs');
 
 const app = express();
 const port = 3001;
-const JWT_SECRET = "kunci-rahasia-jwt-yang-super-aman-dan-panjang";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -18,7 +18,7 @@ const pool = new Pool({
 });
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     exposedHeaders: ['Content-Disposition']
 }));
@@ -39,6 +39,33 @@ const isAdmin = (req, res, next) => {
     if (req.user && req.user.peran === 'Admin') next();
     else res.status(403).json({ message: "Akses ditolak: Hanya untuk Admin." });
 };
+
+app.post("/register", async (req, res) => {
+    const { nama, email, password } = req.body;
+
+    if (!nama || !email || !password) {
+        return res.status(400).json({ message: "Nama, email, dan password wajib diisi." });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        await pool.query(
+            "INSERT INTO users (nama, email, password_hash, peran) VALUES ($1, $2, $3, $4) RETURNING id",
+            [nama, email, hashedPassword, 'Surveyor']
+        );
+
+        res.status(201).json({ message: "Registrasi berhasil! Silakan login." });
+
+    } catch (error) {
+        if (error.code === '23505') { 
+            return res.status(409).json({ message: "Email ini sudah terdaftar." });
+        }
+        
+        console.error("Register Error:", error);
+        res.status(500).json({ message: "Terjadi kesalahan pada server." });
+    }
+});
 
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
