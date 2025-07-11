@@ -644,4 +644,4 @@ app.get("/events/:eventId/hasil-survei/download", verifyToken, async (req, res) 
     }
 });
 
-export default app;
+module.exports = app;
