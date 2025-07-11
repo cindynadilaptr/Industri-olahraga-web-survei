@@ -9,6 +9,16 @@ const ExcelJS = require('exceljs');
 const app = express();
 const apiRouter = express.Router();
 
+console.log("--- [DEBUG] APLIKASI DIMULAI ---");
+console.log(`[DEBUG] DATABASE_URL: ${process.env.DATABASE_URL}`);
+console.log(`[DEBUG] JWT_SECRET: ${process.env.JWT_SECRET ? 'ADA' : 'KOSONG'}`);
+console.log(`[DEBUG] FRONTEND_URL: ${process.env.FRONTEND_URL}`);
+
+app.use((req, res, next) => {
+  console.log(`[DEBUG] REQUEST DITERIMA: ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 const JWT_SECRET = process.env.JWT_SECRET;
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
