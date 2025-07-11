@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/server-api.cjs": {
+      "memory": 1024
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
