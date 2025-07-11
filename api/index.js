@@ -8,6 +8,20 @@ const ExcelJS = require('exceljs');
 
 const app = express();
 
+// +++ KODE DEBUGGING DIMULAI +++
+console.log("--- [DEBUG] File api/index.js Mulai Dijalankan ---");
+console.log(`[DEBUG] Cek Environment Variable DATABASE_URL: ${process.env.DATABASE_URL ? 'ADA' : 'TIDAK ADA / KOSONG'}`);
+console.log(`[DEBUG] Cek Environment Variable JWT_SECRET: ${process.env.JWT_SECRET ? 'ADA' : 'TIDAK ADA / KOSONG'}`);
+console.log(`[DEBUG] Cek Environment Variable FRONTEND_URL: ${process.env.FRONTEND_URL ? 'ADA' : 'TIDAK ADA / KOSONG'}`);
+
+// Middleware untuk mencatat setiap request yang masuk
+app.use((req, res, next) => {
+  console.log(`[DEBUG] Request Diterima: Method=${req.method}, URL=${req.originalUrl}`);
+  next();
+});
+// +++ KODE DEBUGGING SELESAI +++
+
+
 const JWT_SECRET = process.env.JWT_SECRET;
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
