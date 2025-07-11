@@ -7,20 +7,7 @@ const { Pool } = require('pg');
 const ExcelJS = require('exceljs');
 
 const app = express();
-
-// +++ KODE DEBUGGING DIMULAI +++
-console.log("--- [DEBUG] File api/index.js Mulai Dijalankan ---");
-console.log(`[DEBUG] Cek Environment Variable DATABASE_URL: ${process.env.DATABASE_URL ? 'ADA' : 'TIDAK ADA / KOSONG'}`);
-console.log(`[DEBUG] Cek Environment Variable JWT_SECRET: ${process.env.JWT_SECRET ? 'ADA' : 'TIDAK ADA / KOSONG'}`);
-console.log(`[DEBUG] Cek Environment Variable FRONTEND_URL: ${process.env.FRONTEND_URL ? 'ADA' : 'TIDAK ADA / KOSONG'}`);
-
-// Middleware untuk mencatat setiap request yang masuk
-app.use((req, res, next) => {
-  console.log(`[DEBUG] Request Diterima: Method=${req.method}, URL=${req.originalUrl}`);
-  next();
-});
-// +++ KODE DEBUGGING SELESAI +++
-
+const apiRouter = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const pool = new Pool({
@@ -53,7 +40,7 @@ const isAdmin = (req, res, next) => {
     else res.status(403).json({ message: "Akses ditolak: Hanya untuk Admin." });
 };
 
-app.post("/register", async (req, res) => {
+apiRouter.post("/register", async (req, res) => {
     const { nama, email, password } = req.body;
     if (!nama || !email || !password) {
         return res.status(400).json({ message: "Nama, email, dan password wajib diisi." });
@@ -74,7 +61,7 @@ app.post("/register", async (req, res) => {
     }
 });
 
-app.post("/login", async (req, res) => {
+apiRouter.post("/login", async (req, res) => {
     const { email, password } = req.body;
     try {
         const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
@@ -94,9 +81,9 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.get("/me", verifyToken, (req, res) => res.json(req.user));
+apiRouter.get("/me", verifyToken, (req, res) => res.json(req.user));
 
-app.put("/me", verifyToken, async (req, res) => {
+apiRouter.put("/me", verifyToken, async (req, res) => {
     const { nama, email } = req.body;
     const userId = req.user.id;
     try {
@@ -108,7 +95,7 @@ app.put("/me", verifyToken, async (req, res) => {
     }
 });
 
-app.put("/me/password", verifyToken, async (req, res) => {
+apiRouter.put("/me/password", verifyToken, async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     const userId = req.user.id;
     if (!oldPassword || !newPassword) {
@@ -129,7 +116,7 @@ app.put("/me/password", verifyToken, async (req, res) => {
     }
 });
 
-app.get("/me/stats", verifyToken, async (req, res) => {
+apiRouter.get("/me/stats", verifyToken, async (req, res) => {
     try {
         const userId = req.user.id;
         const userRole = req.user.peran;
@@ -159,7 +146,7 @@ app.get("/me/stats", verifyToken, async (req, res) => {
     }
 });
 
-app.get("/users", verifyToken, isAdmin, async (req, res) => {
+apiRouter.get("/users", verifyToken, isAdmin, async (req, res) => {
     try {
         const result = await pool.query("SELECT id, nama, email, peran FROM users ORDER BY nama ASC");
         res.json(result.rows);
@@ -169,7 +156,7 @@ app.get("/users", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.post("/users", verifyToken, isAdmin, async (req, res) => {
+apiRouter.post("/users", verifyToken, isAdmin, async (req, res) => {
     const { nama, email, password, peran } = req.body;
     if (!nama || !email || !password || !peran) return res.status(400).json({ message: "Semua field wajib diisi." });
     try {
@@ -183,7 +170,7 @@ app.post("/users", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.put("/users/:id", verifyToken, isAdmin, async (req, res) => {
+apiRouter.put("/users/:id", verifyToken, isAdmin, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ message: "ID Pengguna tidak valid." });
 
@@ -204,7 +191,7 @@ app.put("/users/:id", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.delete("/users/:id", verifyToken, isAdmin, async (req, res) => {
+apiRouter.delete("/users/:id", verifyToken, isAdmin, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ message: "ID Pengguna tidak valid." });
 
@@ -219,7 +206,7 @@ app.delete("/users/:id", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.get("/kategori-olahraga", verifyToken, async (req, res) => {
+apiRouter.get("/kategori-olahraga", verifyToken, async (req, res) => {
     const { q = '' } = req.query;
     try {
         const result = await pool.query("SELECT * FROM kategori_olahraga WHERE nama_cabor ILIKE $1 ORDER BY nama_cabor ASC", [`%${q}%`]);
@@ -230,7 +217,7 @@ app.get("/kategori-olahraga", verifyToken, async (req, res) => {
     }
 });
 
-app.get("/events", verifyToken, async (req, res) => {
+apiRouter.get("/events", verifyToken, async (req, res) => {
     const { status = 'aktif' } = req.query;
     try {
         const result = await pool.query("SELECT * FROM events WHERE status = $1 ORDER BY tanggal_mulai DESC", [status]);
@@ -241,7 +228,7 @@ app.get("/events", verifyToken, async (req, res) => {
     }
 });
 
-app.post("/events", verifyToken, isAdmin, async (req, res) => {
+apiRouter.post("/events", verifyToken, isAdmin, async (req, res) => {
     let { 
         nama_event, lokasi, tanggal_mulai, tanggal_selesai, deskripsi, 
         jumlah_peserta, skala_event, kategori_olahraga_id, 
@@ -282,7 +269,7 @@ app.post("/events", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.get("/events/:id", verifyToken, async (req, res) => {
+apiRouter.get("/events/:id", verifyToken, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ message: "ID tidak valid." });
 
@@ -304,7 +291,7 @@ app.get("/events/:id", verifyToken, async (req, res) => {
     }
 });
 
-app.put("/events/:id", verifyToken, isAdmin, async (req, res) => {
+apiRouter.put("/events/:id", verifyToken, isAdmin, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ message: "ID Event tidak valid." });
 
@@ -348,7 +335,7 @@ app.put("/events/:id", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.patch("/events/:id/status", verifyToken, isAdmin, async (req, res) => {
+apiRouter.patch("/events/:id/status", verifyToken, isAdmin, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ message: "ID Event tidak valid." });
 
@@ -372,7 +359,7 @@ app.patch("/events/:id/status", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.delete("/events/:id", verifyToken, isAdmin, async (req, res) => {
+apiRouter.delete("/events/:id", verifyToken, isAdmin, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ message: "ID Event tidak valid." });
 
@@ -386,7 +373,7 @@ app.delete("/events/:id", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.get("/events/:eventId/kuesioner", verifyToken, async (req, res) => {
+apiRouter.get("/events/:eventId/kuesioner", verifyToken, async (req, res) => {
     const eventId = parseInt(req.params.eventId, 10);
     if (isNaN(eventId)) return res.status(400).json({ message: "ID Event tidak valid." });
 
@@ -399,7 +386,7 @@ app.get("/events/:eventId/kuesioner", verifyToken, async (req, res) => {
     }
 });
 
-app.post("/kuesioner", verifyToken, isAdmin, async (req, res) => {
+apiRouter.post("/kuesioner", verifyToken, isAdmin, async (req, res) => {
     const { event_id, tipe_responden, nama_kuesioner } = req.body;
     try {
         const result = await pool.query("INSERT INTO kuesioner (event_id, tipe_responden, nama_kuesioner) VALUES ($1, $2, $3) RETURNING id", [event_id, tipe_responden, nama_kuesioner]);
@@ -410,7 +397,7 @@ app.post("/kuesioner", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.delete("/kuesioner/:id", verifyToken, isAdmin, async (req, res) => {
+apiRouter.delete("/kuesioner/:id", verifyToken, isAdmin, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ message: "ID Kuesioner tidak valid." });
 
@@ -423,7 +410,7 @@ app.delete("/kuesioner/:id", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.get("/kuesioner/:kuesionerId/pertanyaan", verifyToken, async (req, res) => {
+apiRouter.get("/kuesioner/:kuesionerId/pertanyaan", verifyToken, async (req, res) => {
     const kuesionerId = parseInt(req.params.kuesionerId, 10);
     if (isNaN(kuesionerId)) return res.status(400).json({ message: "ID Kuesioner tidak valid." });
 
@@ -436,7 +423,7 @@ app.get("/kuesioner/:kuesionerId/pertanyaan", verifyToken, async (req, res) => {
     }
 });
 
-app.post("/pertanyaan", verifyToken, isAdmin, async (req, res) => {
+apiRouter.post("/pertanyaan", verifyToken, isAdmin, async (req, res) => {
     const { kuesioner_id, teks_pertanyaan, tipe_jawaban, urutan } = req.body;
     try {
         const result = await pool.query("INSERT INTO pertanyaan (kuesioner_id, teks_pertanyaan, tipe_jawaban, urutan) VALUES ($1, $2, $3, $4) RETURNING id", [kuesioner_id, teks_pertanyaan, tipe_jawaban, urutan]);
@@ -447,7 +434,7 @@ app.post("/pertanyaan", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.delete("/pertanyaan/:id", verifyToken, isAdmin, async (req, res) => {
+apiRouter.delete("/pertanyaan/:id", verifyToken, isAdmin, async (req, res) => {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) return res.status(400).json({ message: "ID Pertanyaan tidak valid." });
 
@@ -460,7 +447,7 @@ app.delete("/pertanyaan/:id", verifyToken, isAdmin, async (req, res) => {
     }
 });
 
-app.post("/jawaban", verifyToken, async (req, res) => {
+apiRouter.post("/jawaban", verifyToken, async (req, res) => {
     const { kuesionerId, jawaban } = req.body;
     const surveyorId = req.user.id;
     const client = await pool.connect();
@@ -483,7 +470,7 @@ app.post("/jawaban", verifyToken, async (req, res) => {
     }
 });
 
-app.get("/events/:eventId/analisis", verifyToken, async (req, res) => {
+apiRouter.get("/events/:eventId/analisis", verifyToken, async (req, res) => {
     const eventId = parseInt(req.params.eventId, 10);
     if (isNaN(eventId)) return res.status(400).json({ message: "ID Event tidak valid." });
 
@@ -564,7 +551,7 @@ app.get("/events/:eventId/analisis", verifyToken, async (req, res) => {
     }
 });
 
-app.get("/events/:eventId/hasil-survei/download", verifyToken, async (req, res) => {
+apiRouter.get("/events/:eventId/hasil-survei/download", verifyToken, async (req, res) => {
     try {
         const eventId = parseInt(req.params.eventId, 10);
         if (isNaN(eventId)) return res.status(400).json({ message: "ID Event tidak valid." });
@@ -650,5 +637,7 @@ app.get("/events/:eventId/hasil-survei/download", verifyToken, async (req, res) 
         res.status(500).json({ message: "Server error", error: e.message });
     }
 });
+
+app.use('/api', apiRouter);
 
 module.exports = app;
