@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
-export const apiFetch = async (url, options = {}) => {
+const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:3001' : '';
+
+export const apiFetch = async (endpoint, options = {}) => {
   const token = localStorage.getItem('token');
   
   const headers = {
@@ -15,7 +17,9 @@ export const apiFetch = async (url, options = {}) => {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  return fetch(url, { ...options, headers });
+  const fullUrl = `${API_BASE_URL}${endpoint}`;
+
+  return fetch(fullUrl, { ...options, headers });
 };
 
 export function AuthProvider({ children }) {
@@ -28,7 +32,7 @@ export function AuthProvider({ children }) {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const res = await apiFetch("/api/me");
+          const res = await apiFetch("/api/me"); 
           if (res.ok) {
             const data = await res.json();
             setUser(data);
@@ -37,6 +41,7 @@ export function AuthProvider({ children }) {
           }
         } catch (error) {
           console.error("Gagal cek token:", error);
+          localStorage.removeItem('token');
         }
       }
       setLoading(false);

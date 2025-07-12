@@ -654,5 +654,10 @@ app.use((req, res) => {
   res.status(404).json({ error: `Route ${req.method} ${req.originalUrl} not found` });
 });
 
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server backend berjalan di http://localhost:${PORT}`);
+});
+
 
 module.exports = app;

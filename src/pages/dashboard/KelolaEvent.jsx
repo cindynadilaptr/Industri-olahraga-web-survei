@@ -64,7 +64,15 @@ function KelolaEvent() {
             method: 'PATCH',
             body: JSON.stringify({ status: newStatus }),
           });
-          Swal.fire('Berhasil!', `Event telah di${newStatus === 'aktif' ? 'aktifkan' : 'arsip'}.`, 'success');
+          Swal.fire({
+            title: 'Berhasil!',
+            text: `Event telah di${newStatus === 'aktif' ? 'aktifkan' : 'arsip'}.`,
+            icon: 'success',
+            buttonsStyling: false,
+            customClass: {
+              confirmButton: 'font-semibold text-white bg-[#14BBF0] hover:bg-[#0085CE] px-5 py-2.5 rounded-lg transition-colors'
+            }
+          });
           fetchEvents();
         } catch (err) {
           Swal.fire('Error', err.message, 'error');

@@ -17,6 +17,7 @@ import KelolaPenggunaPage from "./pages/dashboard/KelolaPenggunaPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import HasilAnalisisPage from "./pages/dashboard/HasilAnalisisPage.jsx";
 import EventDetailPage from "./pages/dashboard/EventDetailPage.jsx";
+import CreditsPage from "./pages/CreditsPage.jsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/credits" element={<CreditsPage />} />
 
       <Route path="/dashboard-admin" element={<PrivateRoute allowedRoles={["Admin"]}><DashboardAdmin /></PrivateRoute>} />
       <Route path="/dashboard-surveyor" element={<PrivateRoute allowedRoles={["Surveyor"]}><DashboardSurveyor /></PrivateRoute>} />
