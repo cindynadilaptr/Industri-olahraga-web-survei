@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+// --- Ikon-ikon SVG ---
 const LinkedinIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
@@ -45,7 +46,7 @@ const ProfileSection = ({ name, identity, imageUrl, quote, socials, portfolioUrl
                 <h2 className="text-7xl font-black text-[#202262] pointer-events-none">I'm <br/> {name.split(' ')[0]}</h2>
             </div>
             
-            <div className="w-full h-full flex flex-col md:flex-row">
+            <div className="w-full h-full flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
                 <div className={bluePanelClasses} onMouseEnter={() => setHoveredPanel('blue')} onMouseLeave={() => setHoveredPanel(null)}>
                     <div className="flex-grow md:hidden">
                         <p className="text-lg font-light text-[#202262]">HELLO</p>
@@ -57,7 +58,7 @@ const ProfileSection = ({ name, identity, imageUrl, quote, socials, portfolioUrl
                 </div>
 
                 <div className={whitePanelClasses} onMouseEnter={() => setHoveredPanel('white')} onMouseLeave={() => setHoveredPanel(null)}>
-                    <div className="relative flex-1 min-h-0">
+                    <div className="relative h-80 md:flex-1 md:min-h-0">
                         <img 
                             src={imageUrl} 
                             alt={`Foto profil ${name}`} 
