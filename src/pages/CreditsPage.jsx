@@ -87,7 +87,7 @@ const ProfileSection = ({ name, identity, imageUrl, quote, socials, portfolioUrl
 export default function CreditsPage() {
     const teamMembers = [
         { name: 'Cindy Nadila Putri', identity: 'Teknik Informatika ITERA 2022 - Project Manager & Full-Stack Developer', imageUrl: '/cindy.jpg', quote: 'Trying to be a better version of myself every day.', socials: { linkedin: 'https://www.linkedin.com/in/cindy-nadila-putri-3321a1294/', github: 'https://github.com/cindynadilaptr', instagram: 'https://www.instagram.com/cindynadilaptrr', }, portfolioUrl: 'https://www.linkedin.com/in/cindy-nadila-putri-3321a1294/', },
-        { name: 'Giulia Puspo Negoro', identity: 'Teknik Informatika ITERA 2022 - Back-End Developer', imageUrl: '/rekan-tim.png', quote: 'Kolaborasi adalah kunci untuk menghasilkan karya yang luar biasa.', socials: { linkedin: 'https://www.linkedin.com/in/giuliapusponegoro/', github: 'https://github.com/jiyurubyjane', instagram: 'https://www.instagram.com/jiyuulia', }, portfolioUrl: 'https://www.linkedin.com/in/giuliapusponegoro/', },
+        { name: 'Giulia Puspo Negoro', identity: 'Teknik Informatika ITERA 2022 - Back-End Developer', imageUrl: '/jiyu.jpg', quote: 'Be nice be kind.', socials: { linkedin: 'https://www.linkedin.com/in/giuliapusponegoro/', github: 'https://github.com/jiyurubyjane', instagram: 'https://www.instagram.com/jiyuulia', }, portfolioUrl: 'https://www.linkedin.com/in/giuliapusponegoro/', },
     ];
     
     return (
