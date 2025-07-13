@@ -166,7 +166,7 @@ function Login() {
         </form>
         
         <p className="mt-4 text-center text-sm text-[#202262]">
-          Sudah punya akun?{' '}
+          Belum punya akun?{' '}
           <Link to="/register" className="font-medium text-[#14BBF0] hover:text-[#0085CE]">
             Daftar sekarang
           </Link>
