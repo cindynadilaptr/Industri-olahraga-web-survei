@@ -69,13 +69,11 @@ const ProfileSection = ({ name, identity, imageUrl, quote, socials, portfolioUrl
   const whitePanelClasses = `w-full md:w-8/12 bg-white flex flex-col justify-between transition-all duration-500 ease-in-out ${hoveredPanel && hoveredPanel !== 'white' ? 'md:saturate-50 md:scale-95' : 'md:saturate-100 md:scale-100'}`;
 
   return (
-    // Pastikan container ini memiliki tinggi penuh (h-full)
     <div className="w-full h-full font-sans relative">
       <div className={`absolute top-1/4 ${namePosition} z-20 transform -translate-y-1/2 hidden md:block ${textAlign}`}>
         <p className="text-lg font-light text-[#202262]">HELLO</p>
         <h2 className="text-7xl font-black text-[#202262]">I'm <br />{name.split(' ')[0]}</h2>
       </div>
-      {/* Container flex utama, hapus overflow-auto agar tidak ada scroll internal */}
       <div className="w-full h-full flex flex-col md:flex-row">
         <div className={bluePanelClasses} onMouseEnter={() => setHoveredPanel('blue')} onMouseLeave={() => setHoveredPanel(null)}>
           <div className="flex-grow md:hidden">
@@ -87,7 +85,6 @@ const ProfileSection = ({ name, identity, imageUrl, quote, socials, portfolioUrl
           <p className="mt-2 text-lg border-t border-[#202262] pt-2">{identity}</p>
         </div>
         <div className={whitePanelClasses} onMouseEnter={() => setHoveredPanel('white')} onMouseLeave={() => setHoveredPanel(null)}>
-          {/* PERUBAHAN 1: Ganti tinggi tetap dengan flex-1 agar gambar mengisi sisa ruang */}
           <div className="h-80 md:flex-1 md:min-h-0">
             <img
               src={imageUrl}
@@ -96,7 +93,6 @@ const ProfileSection = ({ name, identity, imageUrl, quote, socials, portfolioUrl
               onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/900x600/e2e8f0/4a5568?text=Image+Not+Found'; }}
             />
           </div>
-          {/* PERUBAHAN 2: Batasi pertumbuhan elemen ini di desktop */}
           <div className="p-6 flex flex-col justify-between flex-grow md:flex-grow-0">
             <blockquote className="text-lg italic text-gray-600">"{quote}"</blockquote>
             <div className="mt-5 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
@@ -151,8 +147,7 @@ export default function CreditsPage() {
           </div>
         </div>
         {teamMembers.map((member, index) => (
-          // PERUBAHAN 3: Ganti min-h-screen menjadi h-screen untuk memaksa tinggi penuh
-          <div key={member.name} className="h-screen w-full snap-start">
+          <div key={member.name} className="min-h-screen md:h-screen w-full snap-start">
             <ProfileSection
               name={member.name}
               identity={member.identity}
