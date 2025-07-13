@@ -39,11 +39,10 @@ function LandingPage() {
         className="relative min-h-screen bg-cover bg-center overflow-hidden"
         style={{ backgroundImage: `url(${backgroundAplikasi})` }}
       >
-        <div className="absolute top-0 -left-4 w-72 h-72 rounded-full mix-blend-multiply filter blur-l opacity-95" style={{backgroundColor: '#14BBF0', animation: 'blob 7s infinite'}}></div>
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-red-300 rounded-full mix-blend-multiply filter blur-l opacity-95" style={{backgroundColor: '#ff0101fa',animation: 'blob 7s infinite ease-in-out reverse'}}></div>
-        <div className="absolute bottom-0 -left-4 w-72 h-72 rounded-full mix-blend-multiply filter blur-l opacity-95" style={{backgroundColor: '#A80151', animation: 'blob 7s infinite ease-in-out'}}></div>
-        <div className="absolute bottom-0 -right-4 w-72 h-72 rounded-full mix-blend-multiply filter blur-l opacity-95" style={{backgroundColor: '#FFAD01', animation: 'blob 7s infinite reverse'}}></div>
-
+        <div className="absolute top-0 -left-4 w-48 h-48 md:w-72 md:h-72 rounded-full mix-blend-multiply filter blur-l opacity-95" style={{backgroundColor: '#14BBF0', animation: 'blob 7s infinite'}}></div>
+        <div className="absolute top-0 -right-4 w-48 h-48 md:w-72 md:h-72 rounded-full mix-blend-multiply filter blur-l opacity-95" style={{backgroundColor: '#ff0101fa',animation: 'blob 7s infinite ease-in-out reverse'}}></div>
+        <div className="absolute bottom-0 -left-4 w-48 h-48 md:w-72 md:h-72 rounded-full mix-blend-multiply filter blur-l opacity-95" style={{backgroundColor: '#A80151', animation: 'blob 7s infinite ease-in-out'}}></div>
+        <div className="absolute bottom-0 -right-4 w-48 h-48 md:w-72 md:h-72 rounded-full mix-blend-multiply filter blur-l opacity-95" style={{backgroundColor: '#FFAD01', animation: 'blob 7s infinite reverse'}}></div>
         <header className="relative z-20">
           <div className="container mx-auto px-6 py-4 flex justify-between items-center">
             <div>
